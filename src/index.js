@@ -1,9 +1,9 @@
 const express = require('express')
 const { connectDB } = require('../config/db');
-const {userRouter} = require('./routes/userRoute');
 const { reviewRouter } = require('./routes/reviewRoute');
 const { movieRouter } = require('./routes/movieRoute');
 const { genreRouter } = require('./routes/genreRoute');
+const { userRouter } = require('./routes/userRoute');
 require('dotenv').config();
 
 const app = express();
@@ -12,7 +12,7 @@ const port = 3000;
 connectDB(); 
 
 app.use(express.json());
-app.use('/api/user', userRouter);
+app.use('/api/users', userRouter);
 app.use('/api/reviews', reviewRouter);
 app.use('/api/movies', movieRouter);
 app.use('/api,genre', genreRouter);

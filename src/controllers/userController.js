@@ -1,10 +1,11 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const { admin } = require('../middlewares/authMiddleware');
 
 const registerUser = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, adminCode } = req.body;
         if (!username || !email || !password) {
             return res.status(400).json({ message: 'Please provide all required fields' });
         }
@@ -16,11 +17,12 @@ const registerUser = async (req, res) => {
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-
+        const role = (adminCode === process.env.ADMIN_CODE || email === process.env.ADMIN_EMAIL) ? 'admin' : 'user';
         const user = new User({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            role: role
         });
 
         await user.save();
@@ -40,26 +42,29 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Please provide both email and password' });
         }
 
+        console.log('Attempting login for:', email);
+
         const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+        console.log('User found:', user);
+
+        if (!user || !(await user.matchPassword(password))) {
+            const matchPass = await user.matchPassword(password)
+            console.log(matchPass, "value")
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
-        const isMatch = await user.matchPassword(password);
-        if (!isMatch) {
-            return res.status(401).json({ message: 'Invalid email or password' });
-        }
-
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '1h',
-        });
-
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        console.log('JWT Secret:', process.env.JWT_SECRET);
+        console.log('Generated Token:', token);
         res.json({ token });
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+
+
 
 const getUserProfile = async (req, res) => {
     try {
@@ -106,7 +111,7 @@ const updateUserProfile = async (req, res) => {
             date_joined: user.date_joined
         });
     } catch (error) {
-        console.error('Profile update error:', error); // Log the error for debugging
+        console.error('Profile update error:', error); 
         res.status(500).json({ message: 'Server error' });
     }
 };
