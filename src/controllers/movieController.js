@@ -1,5 +1,5 @@
 const Movie = require('../models/Movies');
-
+const uploadImage = require('../utils/imageUpload')
 const getMovies = async (req, res) => {
     try {
         const movies = await Movie.find();
