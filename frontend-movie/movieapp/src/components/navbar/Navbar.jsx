@@ -1,9 +1,15 @@
-import React from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-export const Navbar = () => {
+import { ThemeContext } from '../../context/ThemeContext';
+const Navbar = () => {
+
+  const { theme, toggleTheme} = useContext(ThemeContext);
+
   return (
     <div>
         <nav>
+          <button onClick={toggleTheme}></button>
+          Switch to {theme === 'light'? 'Dark' : 'Light'} Mode
             <ul>
                 <Link to="/">Home</Link>
                 <Link to="/login">Login</Link>
@@ -14,3 +20,6 @@ export const Navbar = () => {
     </div>
   )
   };
+
+
+export {Navbar};

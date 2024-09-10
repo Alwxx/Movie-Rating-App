@@ -3,9 +3,13 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MovieList from './components/MovieList/MovieList';
 import MovieCard from './components/moviecard/Moviecard';
 import '../src/App.css';
+import { ThemeProvider } from './context/ThemeContext';
+import { Navbar } from './components/navbar/Navbar';
 
 const App = () => {
   return (
+    <ThemeProvider>
+      <Navbar />
     <Router>
       <div className="App">
         <h1>Movie Gallery</h1>
@@ -15,6 +19,7 @@ const App = () => {
         </Routes>
       </div>
     </Router>
+    </ThemeProvider>
   );
 };
 
