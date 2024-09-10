@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage";
 import MoviePage from "./pages/MoviePage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -13,10 +12,10 @@ function AppRouter() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/movies/:id" component={MoviePage} />
-        <Route path="/login" component={LoginPage} />
-        <Route path="/signup" component={SignUpPage} />
-        <Route path="/profile" component={ProfilePage} />
+        <Route path="/movies/:id" element={MoviePage} />
+        <Route path="/login" element={<LoginPage/>} />
+        <Route path="/signup" element={<SignUpPage/>} />
+        <Route path="/profile" element={<ProfilePage/>} />
         <Route path="/" element={<MovieList />} />
         <Route path="/movie/:id" element={<MovieCard />} />
       </Routes>
