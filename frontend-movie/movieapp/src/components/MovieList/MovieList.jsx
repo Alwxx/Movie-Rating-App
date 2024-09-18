@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import MovieCard from '../moviecard/Moviecard';
+import './Movielist.css';
+import { useNavigate } from 'react-router-dom';
 
 const MovieList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedGenre, setSelectedGenre] = useState('All');
-
+  const navigate = useNavigate();
+  
   const movies = [
     {
       id: "66d6d634ae232139c8f2b641",
@@ -42,8 +45,10 @@ const MovieList = () => {
   ];
 
   const handlePosterClick = (movie) => {
+    navigate(`/movies/${movie.id}`);
     setSelectedMovie(movie);
   };
+
   const filteredMovies = movies.filter((movie) => {
     const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesGenre = selectedGenre === 'All' || movie.genre === selectedGenre;
@@ -58,24 +63,14 @@ const MovieList = () => {
         placeholder="Search for a movie..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        style={{
-          marginBottom: '20px',
-          padding: '10px',
-          fontSize: '16px',
-          width: '100%',
-        }}
+        className="search-bar"
       />
 
       {/* Genre Filter */}
       <select
         value={selectedGenre}
         onChange={(e) => setSelectedGenre(e.target.value)}
-        style={{
-          marginBottom: '20px',
-          padding: '10px',
-          fontSize: '16px',
-          width: '100%',
-        }}
+        className="genre-filter"
       >
         <option value="All">All Genres</option>
         <option value="Superhero Comedy">Superhero Comedy</option>
@@ -92,7 +87,7 @@ const MovieList = () => {
             src={movie.poster}
             alt={movie.title}
             onClick={() => handlePosterClick(movie)}
-            style={{ cursor: 'pointer', width: '200px', margin: '10px' }}
+            className="poster-image"
           />
         ))}
       </div>

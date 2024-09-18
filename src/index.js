@@ -4,6 +4,7 @@ const { reviewRouter } = require("./routes/reviewRoute");
 const { movieRouter } = require("./routes/movieRoute");
 const { genreRouter } = require("./routes/genreRoute");
 const { userRouter } = require("./routes/userRoute");
+const cors = require ('cors');
 require("dotenv").config();
 
 const app = express();
@@ -12,6 +13,7 @@ const port = 3001;
 connectDB();
 
 app.use(express.json());
+app.use(cors());
 app.use("/api/users", userRouter);
 app.use("/api/reviews", reviewRouter);
 app.use("/api/movies", movieRouter);

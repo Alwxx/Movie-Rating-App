@@ -5,11 +5,13 @@ import "../src/App.css";
 import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/navbar/Navbar";
 import AppRouter from "./Router.jsx";
+import Footer from "./components/Footer/Footer.jsx";
 
 const App = () => {
   return (
     <ThemeProvider>
       <AppRouter />
+      <Footer/>
     </ThemeProvider>
   );
 };

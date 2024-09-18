@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import fetchMovieById from "../services/movieService";
 import RatingStars from "../components/ratingstars/RatingStars";
+import api from '../services/api';
+
 
 const MoviePage = () => {
   const { id } = useParams();
@@ -12,8 +13,8 @@ const MoviePage = () => {
   useEffect(() => {
     const getMovie = async () => {
       try {
-        const data = await fetchMovieById(id);
-        setMovie(data);
+        const response = api.get(`/movies/${id}`);
+        setMovie(response.data);
       } catch (err) {
         setError(err.message);
       } finally {
