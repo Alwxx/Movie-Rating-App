@@ -1,39 +1,32 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import RatingStars from "../components/ratingstars/RatingStars";
-import api from '../services/api';
-
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { fetchMovieById } from '../services/movieService';
 
 const MoviePage = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getMovie = async () => {
       try {
-        const response = api.get(`/movies/${id}`);
-        setMovie(response.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+        const movieData = await fetchMovieById(id);
+        setMovie(movieData);
+      } catch (error) {
+        console.error('Error fetching movie:', error);
       }
     };
-
     getMovie();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (!movie) return <p>Loading...</p>;
 
   return (
     <div>
       <h1>{movie.title}</h1>
       <img src={movie.poster} alt={movie.title} />
-      <RatingStars rating={movie.rating} />
       <p>{movie.description}</p>
+      <p>Genre: {movie.genre}</p>
+      <p>Rating: {movie.rating}</p>
     </div>
   );
 };

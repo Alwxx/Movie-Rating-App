@@ -1,25 +1,26 @@
 import { useState } from 'react';
-import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../services/authService';
 import './LoginPage.css';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await api.post('/users/login', { email, password });
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      history.push('/');
+      const response = await login(email, password);
+      localStorage.setItem('token', response.token); // Store JWT token
+      navigate('/');
     } catch (error) {
-      setError('Invalid email or password. Please try again.');
-      console.error('Login error:', error);
+      console.log(error)
+      setError('Invalid email or password.');
     }
   };
-
 
   return (
     <div>
@@ -47,4 +48,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-

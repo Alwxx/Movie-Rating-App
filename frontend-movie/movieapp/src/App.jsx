@@ -6,13 +6,18 @@ import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/navbar/Navbar";
 import AppRouter from "./Router.jsx";
 import Footer from "./components/Footer/Footer.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 const App = () => {
   return (
     <ThemeProvider>
-      <AppRouter />
+      <AuthProvider>      
+        <AppRouter />
       <Footer/>
+      </AuthProvider>
+
     </ThemeProvider>
+    
   );
 };
 
